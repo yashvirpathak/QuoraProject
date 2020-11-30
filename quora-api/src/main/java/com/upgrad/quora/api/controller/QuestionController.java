@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,8 +39,20 @@ public class QuestionController {
     }
 
     @RequestMapping(path = "/question/all", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<QuestionResponse> getAllQuestions(){
-        return new ResponseEntity<QuestionResponse>(HttpStatus.OK);
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(){
+
+        List<QuestionDetailsResponse> questionDetailsResponses=new ArrayList<QuestionDetailsResponse>();
+
+        final List<QuestionEntity> questionEntities=questionBusinessService.getAllQuestions();
+
+        for(QuestionEntity questionEntity: questionEntities){
+            questionDetailsResponses.add(
+                    new QuestionDetailsResponse()
+                            .id(questionEntity.getUuid())
+                            .content(questionEntity.getContent())
+            );
+        }
+        return new ResponseEntity<List<QuestionDetailsResponse>>(questionDetailsResponses, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/question/edit/{questionId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

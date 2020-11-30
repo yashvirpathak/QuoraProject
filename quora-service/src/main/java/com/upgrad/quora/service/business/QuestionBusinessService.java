@@ -5,6 +5,8 @@ import com.upgrad.quora.service.entity.QuestionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class QuestionBusinessService {
     @Autowired
@@ -13,5 +15,9 @@ public class QuestionBusinessService {
     public QuestionEntity createQuestion(QuestionEntity questionEntity){
         return questionDao.createQuestion(questionEntity);
 
+    }
+
+    public List<QuestionEntity> getAllQuestions(){
+        return questionDao.getAllQuestions();
     }
 }
