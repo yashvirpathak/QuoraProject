@@ -33,7 +33,7 @@ public class QuestionController {
 
         QuestionResponse questionResponse=new QuestionResponse().id(createdQuestionEntity.getUuid()).status("QUESTION CREATED");
 
-        return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.OK);
+        return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "/question/all", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
