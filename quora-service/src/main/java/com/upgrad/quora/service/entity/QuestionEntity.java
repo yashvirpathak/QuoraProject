@@ -33,9 +33,9 @@ public class QuestionEntity implements Serializable {
     @NotNull
     private ZonedDateTime createDate;
 
-    /*@ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private UserEntity user;*/
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 
     public int getId() {
@@ -70,11 +70,11 @@ public class QuestionEntity implements Serializable {
         this.createDate = createDate;
     }
 
-    /*public UserEntity getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }*/
+    }
 }
