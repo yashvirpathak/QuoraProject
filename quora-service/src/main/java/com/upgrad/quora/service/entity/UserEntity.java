@@ -2,84 +2,85 @@ package com.upgrad.quora.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "users", schema = "quora")
+@Table(name = "users")
 @NamedQueries(
         {
-            @NamedQuery(name = "userByUsername", query = "select u from UserEntity u where u.userName = :username")
+            @NamedQuery(name = "userByUsername", query = "select u from UserEntity u where u.userName = :username"),
+                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email")
+
         }
 )
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "UUID")
+    @Column(name = "uuid")
     @Size(max = 200)
     private String uuid;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "firstname")
     @NotNull
     @Size(max = 30)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "lastname")
     @NotNull
     @Size(max = 30)
     private String lastName;
 
-    @Column(name = "USER_NAME")
+    @Column(name = "username")
     @NotNull
     @Size(max = 30)
     private String userName;
 
-    @Column(name = "EMAIL")
+    @Column(name = "email")
     @NotNull
     @Size(max = 50)
     private String email;
 
     //@ToStringExclude
-    @Column(name = "PASSWORD")
+    @Column(name = "password")
     @NotNull
     @Size(max = 255)
     private String password;
 
-    @Column(name = "SALT")
+    @Column(name = "salt")
     @NotNull
     @Size(max = 200)
     //@ToStringExclude
     private String salt;
 
-    @Column(name = "COUNTRY")
+    @Column(name = "country")
     @NotNull
     @Size(max = 30)
     private String country;
 
-    @Column(name = "ABOUT_ME")
+    @Column(name = "aboutme")
     @NotNull
     @Size(max = 50)
     private String aboutMe;
 
-    @Column(name = "DOB")
+    @Column(name = "dob")
     @NotNull
     @Size(max = 30)
     private String dob;
 
-    @Column(name = "ROLE")
+    @Column(name = "role")
     @NotNull
     @Size(max = 30)
     private String role;
 
-    @Column(name = "CONTACT_NUMBER")
+    @Column(name = "contactnumber")
     @NotNull
     @Size(max = 30)
     private String contactNumber;
@@ -94,10 +95,10 @@ public class UserEntity {
         return new HashCodeBuilder().append(this).hashCode();
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
+    }*/
 
     public Integer getId() {
         return id;
