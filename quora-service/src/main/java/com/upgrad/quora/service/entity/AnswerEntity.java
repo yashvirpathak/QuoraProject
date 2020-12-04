@@ -8,6 +8,10 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "answer", schema = "quora")
+@NamedQueries(value = {
+        @NamedQuery(name = "allAnswersToQuestion", query = "select a from AnswerEntity a where a.question.uuid=:questionId"),
+        @NamedQuery(name = "answerById", query = "select a from AnswerEntity a where a.uuid=:uuid")
+})
 public class AnswerEntity implements Serializable {
     @Id
     @Column(name = "id")
@@ -27,9 +31,9 @@ public class AnswerEntity implements Serializable {
     @NotNull
     private ZonedDateTime createDate;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private UserEntity user;*/
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -67,13 +71,13 @@ public class AnswerEntity implements Serializable {
         this.createDate = createDate;
     }
 
-    /*public UserEntity getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }*/
+    }
 
     public QuestionEntity getQuestion() {
         return question;

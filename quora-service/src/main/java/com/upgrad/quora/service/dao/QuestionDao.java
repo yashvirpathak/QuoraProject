@@ -22,7 +22,9 @@ public class QuestionDao {
 
     public QuestionEntity getQuestionByUuid(final String questionId){
         try {
-            return entityManager.createNamedQuery("allQuestionById", QuestionEntity.class).getSingleResult();
+            return entityManager.createNamedQuery("allQuestionById", QuestionEntity.class)
+                    .setParameter("uuid", questionId)
+                    .getSingleResult();
         }catch (NoResultException nre) {
             return null;
         }
