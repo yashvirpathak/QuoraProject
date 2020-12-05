@@ -19,6 +19,11 @@ public class AnswerDao {
         return answerEntity;
     }
 
+    // Method to update the answer
+    public AnswerEntity editAnswerContent(final AnswerEntity answerEntity){
+        return entityManager.merge(answerEntity);
+    }
+
     // Method to delete an answer
     public boolean deleteAnswer(final AnswerEntity answerEntity) throws IllegalArgumentException{
         try{

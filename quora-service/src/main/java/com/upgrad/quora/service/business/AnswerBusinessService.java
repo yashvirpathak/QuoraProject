@@ -40,6 +40,35 @@ public class AnswerBusinessService {
         return answerDao.createAnswer(answerEntity);
     }
 
+    // Method to edit Answer content
+    public AnswerEntity editAnswerContent(final AnswerEntity editRequest, final String authorization)
+            throws AuthorizationFailedException, AnswerNotFoundException {
+
+        // Authorizing user
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        if (userAuthTokenEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to edit an answer");
+        }
+
+        // Check if Answer is valid or not
+        AnswerEntity answerEntity=answerDao.getAnswerByUuid(editRequest.getUuid());
+        if (answerEntity == null || answerEntity.getUuid().isEmpty()) {
+            throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
+        }
+
+        // Checking if user is owner of the answer
+        if (!(userAuthTokenEntity.getUser().equals(editRequest.getUser()))) {
+            throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
+        }
+
+        // Update/edit the answer
+        return answerDao.editAnswerContent(editRequest);
+    }
+
     // Method to delete an answer
     public boolean deleteAnswer(final String answerId, final String authorization)
             throws AuthorizationFailedException, AnswerNotFoundException {
