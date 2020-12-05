@@ -1,8 +1,12 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserDao;
+import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
+import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,6 +18,9 @@ public class SignupBusinessService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private QuestionDao questionDao;
 
     @Autowired
     private PasswordCryptographyProvider cryptographyProvider;
@@ -36,6 +43,16 @@ public class SignupBusinessService {
         userEntity.setPassword(encryptedPassword[1]);
         return userDao.createUser(userEntity);
 
+    }
+
+    public UserEntity getUser(String userId, String userAuthorizationToken) throws UserNotFoundException, AuthorizationFailedException {
+        UserEntity userEntity = userDao.getUserById(userId);
+        UserAuthTokenEntity userAuthToken = questionDao.getUserAuthToken(userAuthorizationToken);
+        // TODO - Authorization check
+        if (userEntity == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
+        }
+        return userEntity;
     }
 
 }
