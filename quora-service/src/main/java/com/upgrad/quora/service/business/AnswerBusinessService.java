@@ -3,13 +3,16 @@ package com.upgrad.quora.service.business;
 import com.upgrad.quora.service.dao.AnswerDao;
 import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.entity.AnswerEntity;
+import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 public class AnswerBusinessService {
@@ -65,5 +68,29 @@ public class AnswerBusinessService {
 
         // Delete the answer
         return answerDao.deleteAnswer(deleteRequest);
+    }
+
+    // Method to get all answers for given question
+    public List<AnswerEntity> getAllAnswersToQuestion(final String questionId, final String authorization)
+            throws AuthorizationFailedException, InvalidQuestionException {
+
+        // Authorize user
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        if (userAuthTokenEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
+        }
+
+        // Check if Question exists in DB
+        QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionId);
+        if (questionEntity == null  || questionEntity.getUuid().isEmpty()) {
+            throw new InvalidQuestionException("QUES-001", "The question with entered uuid whose details are to be seen does not exist");
+        }
+
+        // Get all questions for the given question
+        return answerDao.getAllAnswersToQuestion(questionId);
     }
 }
