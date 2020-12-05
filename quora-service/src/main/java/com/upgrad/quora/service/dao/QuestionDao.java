@@ -58,4 +58,17 @@ public class QuestionDao {
         // merging the question entity
         return entityManager.merge(questionEntity);
     }
+
+    // Method to delete question. QuestionEntity as input will be deleted from DB
+    public boolean deleteQuestion(final QuestionEntity questionEntity) throws IllegalArgumentException{
+        try{
+            // Initiating delete question transaction
+            entityManager.getTransaction().begin();
+            entityManager.remove(questionEntity);
+            entityManager.getTransaction().commit();
+        }catch (IllegalArgumentException iae){
+            return false;
+        }
+        return true;
+    }
 }
