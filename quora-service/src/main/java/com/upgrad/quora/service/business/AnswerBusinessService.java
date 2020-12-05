@@ -55,7 +55,7 @@ public class AnswerBusinessService {
         }
 
         // Check if Answer is valid or not
-        AnswerEntity answerEntity=answerDao.getAnswerByUuid(editRequest.getUuid());
+        AnswerEntity answerEntity = answerDao.getAnswerByUuid(editRequest.getUuid());
         if (answerEntity == null || answerEntity.getUuid().isEmpty()) {
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
@@ -115,7 +115,7 @@ public class AnswerBusinessService {
 
         // Check if Question exists in DB
         QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionId);
-        if (questionEntity == null  || questionEntity.getUuid().isEmpty()) {
+        if (questionEntity == null || questionEntity.getUuid().isEmpty()) {
             throw new InvalidQuestionException("QUES-001", "The question with entered uuid whose details are to be seen does not exist");
         }
 

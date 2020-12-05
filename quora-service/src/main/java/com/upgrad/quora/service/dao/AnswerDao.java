@@ -20,43 +20,43 @@ public class AnswerDao {
     }
 
     // Method to update the answer
-    public AnswerEntity editAnswerContent(final AnswerEntity answerEntity){
+    public AnswerEntity editAnswerContent(final AnswerEntity answerEntity) {
         return entityManager.merge(answerEntity);
     }
 
     // Method to delete an answer
-    public boolean deleteAnswer(final AnswerEntity answerEntity) throws IllegalArgumentException{
-        try{
+    public boolean deleteAnswer(final AnswerEntity answerEntity) throws IllegalArgumentException {
+        try {
             // Initiating transaction to remove answer
             entityManager.getTransaction().begin();
             entityManager.remove(answerEntity);
             entityManager.getTransaction().commit();
-        }catch (IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
             return false;
         }
         return true;
     }
 
     // Method to get Answer Entity based on Uuid
-    public AnswerEntity getAnswerByUuid(final String answerId){
+    public AnswerEntity getAnswerByUuid(final String answerId) {
         try {
             // Calling named query to get data
             return entityManager.createNamedQuery("answerById", AnswerEntity.class)
-                    .setParameter("uuid",answerId)
+                    .setParameter("uuid", answerId)
                     .getSingleResult();
-        }catch (NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
 
     // Method to get all answers for given question
-    public List<AnswerEntity> getAllAnswersToQuestion(final String questionId){
+    public List<AnswerEntity> getAllAnswersToQuestion(final String questionId) {
         try {
             // Calling named query to get data
             return entityManager.createNamedQuery("allAnswersToQuestion", AnswerEntity.class)
                     .setParameter("questionId", questionId)
                     .getResultList();
-        }catch (NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }

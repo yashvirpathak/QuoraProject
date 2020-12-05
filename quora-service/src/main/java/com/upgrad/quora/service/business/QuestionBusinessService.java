@@ -131,12 +131,12 @@ public class QuestionBusinessService {
     }
 
     // Get Question details by Uuid
-    public QuestionEntity getQuestionByUuid(final String questionId) throws InvalidQuestionException{
+    public QuestionEntity getQuestionByUuid(final String questionId) throws InvalidQuestionException {
 
         // Check if Question exists in DB or not
-        QuestionEntity questionEntity= questionDao.getQuestionByUuid(questionId);
-        if(questionEntity == null || questionEntity.getUuid().isEmpty()){
-            throw new InvalidQuestionException("QUES-001","The question entered is invalid");
+        QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionId);
+        if (questionEntity == null || questionEntity.getUuid().isEmpty()) {
+            throw new InvalidQuestionException("QUES-001", "The question entered is invalid");
         }
 
         // return question entity

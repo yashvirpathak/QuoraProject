@@ -15,7 +15,7 @@ public class QuestionDao {
     private EntityManager entityManager;
 
     // Method to create new question. Persisting Question Entity in DB
-    public QuestionEntity createQuestion(QuestionEntity questionEntity){
+    public QuestionEntity createQuestion(QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
         return questionEntity;
     }
@@ -33,52 +33,52 @@ public class QuestionDao {
     }
 
     // Method to get single question details by Uuid
-    public QuestionEntity getQuestionByUuid(final String questionId){
+    public QuestionEntity getQuestionByUuid(final String questionId) {
         try {
             // Calling named query to get data
             return entityManager.createNamedQuery("allQuestionById", QuestionEntity.class)
                     .setParameter("uuid", questionId)
                     .getSingleResult();
-        }catch (NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
 
     // Method to get all questions posted by any user
-    public List<QuestionEntity> getAllQuestions(){
+    public List<QuestionEntity> getAllQuestions() {
         try {
             return entityManager.createNamedQuery("allQuestions", QuestionEntity.class).getResultList();
-        }catch (NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
 
     // Method to edit content for given question
-    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity){
+    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity) {
         // merging the question entity
         return entityManager.merge(questionEntity);
     }
 
     // Method to delete question. QuestionEntity as input will be deleted from DB
-    public boolean deleteQuestion(final QuestionEntity questionEntity) throws IllegalArgumentException{
-        try{
+    public boolean deleteQuestion(final QuestionEntity questionEntity) throws IllegalArgumentException {
+        try {
             // Initiating delete question transaction
             entityManager.getTransaction().begin();
             entityManager.remove(questionEntity);
             entityManager.getTransaction().commit();
-        }catch (IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
             return false;
         }
         return true;
     }
 
     // Method to get all questions owner by the user
-    public List<QuestionEntity> getAllQuestionsByUser(final String userId){
+    public List<QuestionEntity> getAllQuestionsByUser(final String userId) {
         try {
             return entityManager.createNamedQuery("allQuestionsByUserId", QuestionEntity.class)
-                    .setParameter("uuid",userId )
+                    .setParameter("uuid", userId)
                     .getResultList();
-        }catch (NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
