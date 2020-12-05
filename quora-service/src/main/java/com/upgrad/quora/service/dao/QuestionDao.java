@@ -23,7 +23,7 @@ public class QuestionDao {
     // Fetch user authentication token
     public UserAuthTokenEntity getUserAuthToken(final String accessToken) {
         try {
-            // Calling names query to get data
+            // Calling named query to get data
             return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthTokenEntity.class)
                     .setParameter("accessToken", accessToken)
                     .getSingleResult();
@@ -35,7 +35,7 @@ public class QuestionDao {
     // Method to get single question details by Uuid
     public QuestionEntity getQuestionByUuid(final String questionId){
         try {
-            // Calling names query to get data
+            // Calling named query to get data
             return entityManager.createNamedQuery("allQuestionById", QuestionEntity.class)
                     .setParameter("uuid", questionId)
                     .getSingleResult();
@@ -70,5 +70,16 @@ public class QuestionDao {
             return false;
         }
         return true;
+    }
+
+    // Method to get all questions owner by the user
+    public List<QuestionEntity> getAllQuestionsByUser(final String userId){
+        try {
+            return entityManager.createNamedQuery("allQuestionsByUserId", QuestionEntity.class)
+                    .setParameter("uuid",userId )
+                    .getResultList();
+        }catch (NoResultException nre) {
+            return null;
+        }
     }
 }
