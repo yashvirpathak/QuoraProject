@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 public class QuestionBusinessService {
@@ -25,6 +26,17 @@ public class QuestionBusinessService {
         }
 
         return questionDao.createQuestion(questionEntity);
+    }
 
+    public List<QuestionEntity> getAllQuestions(final String authorization) throws AuthorizationFailedException{
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        if (userAuthTokenEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+
+        if(userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now())<0){
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
+        }
+        return questionDao.getAllQuestions();
     }
 }
