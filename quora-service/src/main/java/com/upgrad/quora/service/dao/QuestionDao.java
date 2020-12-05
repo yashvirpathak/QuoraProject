@@ -14,21 +14,28 @@ public class QuestionDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Method to create new question. Persisting Question Entity in DB
     public QuestionEntity createQuestion(QuestionEntity questionEntity){
         entityManager.persist(questionEntity);
         return questionEntity;
     }
 
-    public UserAuthTokenEntity getUserAuthToken(final String accesstoken) {
+    // Fetch user authentication token
+    public UserAuthTokenEntity getUserAuthToken(final String accessToken) {
         try {
-            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthTokenEntity.class).setParameter("accessToken", accesstoken).getSingleResult();
+            // Calling names query to get data
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthTokenEntity.class)
+                    .setParameter("accessToken", accessToken)
+                    .getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
+    // Method to get single question details by Uuid
     public QuestionEntity getQuestionByUuid(final String questionId){
         try {
+            // Calling names query to get data
             return entityManager.createNamedQuery("allQuestionById", QuestionEntity.class)
                     .setParameter("uuid", questionId)
                     .getSingleResult();
@@ -37,11 +44,18 @@ public class QuestionDao {
         }
     }
 
+    // Method to get all questions posted by any user
     public List<QuestionEntity> getAllQuestions(){
         try {
             return entityManager.createNamedQuery("allQuestions", QuestionEntity.class).getResultList();
         }catch (NoResultException nre) {
             return null;
         }
+    }
+
+    // Method to edit content for given question
+    public QuestionEntity editQuestionContent(final QuestionEntity questionEntity){
+        // merging the question entity
+        return entityManager.merge(questionEntity);
     }
 }
