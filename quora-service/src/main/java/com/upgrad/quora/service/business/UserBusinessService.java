@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Service
 public class UserBusinessService {
@@ -49,9 +48,17 @@ public class UserBusinessService {
     public UserEntity getUser(String userId, String userAuthorizationToken) throws UserNotFoundException, AuthorizationFailedException {
         UserEntity userEntity = userDao.getUserById(userId);
         UserAuthTokenEntity userAuthToken = questionDao.getUserAuthToken(userAuthorizationToken);
-        // TODO - Authorization check
+
+        if (userAuthToken == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+        if ((userAuthToken.getLogoutAt() != null) &&
+                (userAuthToken.getExpiresAt().compareTo(ZonedDateTime.now()) < 0)) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get user details");
+        }
+
         if (userEntity == null) {
-            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
+            throw new UserNotFoundException("USR-001", "User with entered uuid does not exist");
         }
         return userEntity;
     }
@@ -61,26 +68,25 @@ public class UserBusinessService {
     public UserAuthTokenEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
         UserEntity userEntity = userDao.getUserByUsername(username);
 
-        if(userEntity == null) {
+        if (userEntity == null) {
             throw new AuthenticationFailedException("ATH-001", "This username does not exist");
         }
 
         final String encryptedPassword = cryptographyProvider.encrypt(password, userEntity.getSalt());
 
-        if(encryptedPassword.equals(userEntity.getPassword())) {
+        if (encryptedPassword.equals(userEntity.getPassword())) {
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
             UserAuthTokenEntity userAuthToken = new UserAuthTokenEntity();
             userAuthToken.setUser(userEntity);
             final ZonedDateTime now = ZonedDateTime.now();
             final ZonedDateTime expiresAt = now.plusHours(8);
-            userAuthToken.setUuid(UUID.randomUUID().toString());
+            userAuthToken.setUuid(userEntity.getUuid());
             userAuthToken.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), now, expiresAt));
             userAuthToken.setLoginAt(now);
             userAuthToken.setExpiresAt(expiresAt);
 
             return userDao.createAuthToken(userAuthToken);
-        }
-        else {
+        } else {
             throw new AuthenticationFailedException("ATH-002", "Password failed");
         }
     }
@@ -90,12 +96,12 @@ public class UserBusinessService {
 
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
 
-        if(userAuthToken == null) {
+        if (userAuthToken == null) {
             throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
         }
 
         userAuthToken.setLogoutAt(ZonedDateTime.now());
-
+        userDao.updateUserAuth(userAuthToken);
         UserEntity signedOutUser = userAuthToken.getUser();
         return signedOutUser;
 

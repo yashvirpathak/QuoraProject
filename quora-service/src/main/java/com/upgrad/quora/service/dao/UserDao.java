@@ -3,6 +3,7 @@ package com.upgrad.quora.service.dao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -78,5 +79,11 @@ public class UserDao {
     //Method to delete user authentication token
     public void deleteAuthToken(final UserAuthTokenEntity userAuthToken) {
         entityManager.remove(userAuthToken);
+    }
+
+    //Method to update userAuth token
+    @Transactional
+    public void updateUserAuth(final UserAuthTokenEntity userAuthToken) {
+        entityManager.merge(userAuthToken);
     }
 }
