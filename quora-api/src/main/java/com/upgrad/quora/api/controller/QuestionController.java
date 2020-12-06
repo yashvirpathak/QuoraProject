@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class QuestionController {
 
     // Method to create question
     @RequestMapping(path = "/question/create", method = RequestMethod.POST)
-    public ResponseEntity<QuestionResponse> createQuestion(final QuestionRequest request, final String authorizationToken)
+    public ResponseEntity<QuestionResponse> createQuestion(final QuestionRequest request, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException {
 
         // Initializing Question Entity
@@ -39,7 +36,8 @@ public class QuestionController {
         questionEntity.setCreateDate(ZonedDateTime.now());
 
         // Creating question
-        final QuestionEntity createdQuestionEntity = questionBusinessService.createQuestion(questionEntity, authorizationToken);
+        String token = CommonController.getToken(authorizationToken);
+        final QuestionEntity createdQuestionEntity = questionBusinessService.createQuestion(questionEntity, token);
 
         // Preparing response and returning data
         QuestionResponse questionResponse = new QuestionResponse().id(createdQuestionEntity.getUuid()).status("QUESTION CREATED");
@@ -55,7 +53,8 @@ public class QuestionController {
         List<QuestionDetailsResponse> questionDetailsResponses = new ArrayList<QuestionDetailsResponse>();
 
         // get all questions
-        final List<QuestionEntity> questionEntities = questionBusinessService.getAllQuestions(authorizationToken);
+        String token = CommonController.getToken(authorizationToken);
+        final List<QuestionEntity> questionEntities = questionBusinessService.getAllQuestions(token);
 
         // Adding questions in the collection
         for (QuestionEntity questionEntity : questionEntities) {
