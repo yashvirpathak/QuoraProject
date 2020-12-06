@@ -5,6 +5,7 @@ C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\c
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\configuration\HomeController.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\RFC3339DateFormat.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\configuration\SwaggerDocumentationConfig.java
+C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\src\main\java\com\upgrad\quora\api\exception\RestExceptionHandler.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\QuestionEditResponse.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\QuestionResponse.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\SignupUserRequest.java
@@ -19,12 +20,12 @@ C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\c
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\AnswerDetailsResponse.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\QuestionEditRequest.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\SigninResponse.java
+C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\src\main\java\com\upgrad\quora\api\controller\UserController.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\QuestionDeleteResponse.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\api\ApiResponseMessage.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\ErrorResponse.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\UserDetailsResponse.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\api\ApiOriginFilter.java
-C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\src\main\java\com\upgrad\quora\api\controller\SignupController.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\api\ApiException.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\io\swagger\api\NotFoundException.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-api\target\generated-sources\.\com\upgrad\quora\api\model\QuestionRequest.java

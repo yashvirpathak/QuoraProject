@@ -9,8 +9,9 @@ C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\exception\AuthenticationFailedException.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\dao\UserDao.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\entity\UserEntity.java
-C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\business\SignupBusinessService.java
+C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\entity\UserAuthTokenEntity.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\business\PasswordCryptographyProvider.java
+C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\business\UserBusinessService.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\common\UnexpectedException.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\exception\UserNotFoundException.java
 C:\Users\Karene\IdeaProjects\QuoraProject\quora-service\src\main\java\com\upgrad\quora\service\exception\InvalidQuestionException.java
