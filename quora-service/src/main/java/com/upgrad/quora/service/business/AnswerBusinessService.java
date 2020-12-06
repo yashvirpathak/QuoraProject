@@ -35,7 +35,9 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post an answer");
         }
 
@@ -55,7 +57,9 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to edit an answer");
         }
 
@@ -90,7 +94,9 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
         }
 
@@ -120,7 +126,9 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
         }
 

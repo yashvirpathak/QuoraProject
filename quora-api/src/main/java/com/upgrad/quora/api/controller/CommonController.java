@@ -23,7 +23,7 @@ public class CommonController {
             throws AuthorizationFailedException, UserNotFoundException {
 
         // Calling user service to get user details
-        String token=getToken(authorization);
+        String token = getToken(authorization);
         UserEntity userEntity = userBusinessService.getUser(userId, token);
 
         // Preparing and returning user details

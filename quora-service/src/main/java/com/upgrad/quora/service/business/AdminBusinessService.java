@@ -29,7 +29,9 @@ public class AdminBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
         }
 

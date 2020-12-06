@@ -34,7 +34,9 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
 
@@ -52,7 +54,9 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
 
@@ -71,13 +75,13 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
 
-        // Checking if question exists in DB
-        //QuestionEntity questionEntity = questionDao.getQuestionByUuid(editRequest.getUuid());
-
+        // Check if question is valid
         if (editRequest == null || editRequest.getUuid().isEmpty()) {
             throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
         }
@@ -102,7 +106,9 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
 
@@ -131,7 +137,9 @@ public class QuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null &&
+                userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
+                userAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
 
