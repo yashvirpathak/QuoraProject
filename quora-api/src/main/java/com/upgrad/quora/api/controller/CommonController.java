@@ -19,11 +19,14 @@ public class CommonController {
     UserBusinessService userBusinessService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDetailsResponse> userDetails(@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
+    public ResponseEntity<UserDetailsResponse> userDetails(@PathVariable("userId") final String userId, @RequestHeader("authorization") final String authorization)
+            throws AuthorizationFailedException, UserNotFoundException {
 
-        UserEntity userEntity;
-        userEntity = userBusinessService.getUser(userId, authorization);
+        // Calling user service to get user details
+        String token=getToken(authorization);
+        UserEntity userEntity = userBusinessService.getUser(userId, token);
 
+        // Preparing and returning user details
         UserDetailsResponse userDetails = new UserDetailsResponse().firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName()).emailAddress(userEntity.getEmail())
                 .contactNumber(userEntity.getContactNumber()).userName(userEntity.getUserName())
@@ -32,6 +35,7 @@ public class CommonController {
         return new ResponseEntity<UserDetailsResponse>(userDetails, HttpStatus.OK);
     }
 
+    // Method to get token
     public static String getToken(final String token) {
         String[] userAuthorizationToken = token.split("Bearer ");
         return userAuthorizationToken[1];
