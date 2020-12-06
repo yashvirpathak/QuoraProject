@@ -107,7 +107,7 @@ public class QuestionController {
     }
 
     // Method to get all Questions owned by user
-    @RequestMapping(path = "question/all/{userId}", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "question/all/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser(@PathVariable String userId, @RequestHeader("Authorization") final String authorizationToken)
             throws AuthorizationFailedException, UserNotFoundException {
         List<QuestionDetailsResponse> questionDetailsResponses = new ArrayList<QuestionDetailsResponse>();
