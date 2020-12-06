@@ -25,8 +25,8 @@ public class QuestionController {
     private QuestionBusinessService questionBusinessService;
 
     // Method to create question
-    @RequestMapping(path = "/question/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<QuestionResponse> createQuestion(final QuestionRequest request, @RequestHeader("Authorization") final String authorizationToken)
+    @RequestMapping(path = "/question/create", method = RequestMethod.POST)
+    public ResponseEntity<QuestionResponse> createQuestion(final QuestionRequest request, final String authorizationToken)
             throws AuthorizationFailedException {
 
         // Initializing Question Entity
