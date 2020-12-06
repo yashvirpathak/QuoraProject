@@ -101,7 +101,7 @@ public class AnswerBusinessService {
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
 
-        // Throw exception if user is not owner of answer or not an admin
+        // Throw exception if user is not owner of answer or not an admin user
         if (!(userAuthTokenEntity.getUser().equals(deleteRequest.getUser()) || deleteRequest.getUser().getRole().toLowerCase().equals("admin"))) {
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
         }
