@@ -10,6 +10,8 @@ import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -23,6 +25,7 @@ public class AnswerBusinessService {
     private QuestionDao questionDao;
 
     // Method to create an Answer
+    @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity createAnswer(final AnswerEntity answerEntity, final String authorization)
             throws AuthorizationFailedException {
 
@@ -32,15 +35,17 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post an answer");
         }
 
         // Create answer
+        answerEntity.setUser(userAuthTokenEntity.getUser());
         return answerDao.createAnswer(answerEntity);
     }
 
     // Method to edit Answer content
+    @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity editAnswerContent(final AnswerEntity editRequest, final String authorization)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
@@ -50,7 +55,7 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to edit an answer");
         }
 
@@ -70,6 +75,7 @@ public class AnswerBusinessService {
     }
 
     // Method to delete an answer
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteAnswer(final String answerId, final String authorization)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
@@ -79,7 +85,7 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
         }
 
@@ -109,7 +115,7 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
         }
 
