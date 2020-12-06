@@ -2,8 +2,6 @@ package com.upgrad.quora.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +10,7 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "USER_AUTH", schema = "quora")
+@Table(name = "USER_AUTH")
 @NamedQueries({
         @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthTokenEntity ut where ut.accessToken =:accessToken")
 })
@@ -29,7 +27,7 @@ public class UserAuthTokenEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private com.upgrad.quora.service.entity.UserEntity user;
+    private UserEntity user;
 
     @Column(name = "ACCESS_TOKEN")
     @NotNull
@@ -104,11 +102,6 @@ public class UserAuthTokenEntity implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(this).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
     public String getUuid() {
