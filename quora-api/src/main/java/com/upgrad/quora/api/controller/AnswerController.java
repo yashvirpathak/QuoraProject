@@ -30,7 +30,7 @@ public class AnswerController {
 
     // Method to create an Answer
     @RequestMapping(path = "/question/{questionId}/answer/create", method = RequestMethod.POST)
-    public ResponseEntity<AnswerResponse> createAnswer(final AnswerRequest request, final @PathVariable String questionId, @RequestHeader("Authorization") final String authorizationToken)
+    public ResponseEntity<AnswerResponse> createAnswer(final AnswerRequest request, final @PathVariable String questionId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Checking if question exists in DB
@@ -56,7 +56,7 @@ public class AnswerController {
 
     // Method to edit answer content
     @RequestMapping(path = "/answer/edit/{answerId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest editRequest, @PathVariable String answerId, @RequestHeader("Authorization") final String authorizationToken)
+    public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest editRequest, @PathVariable String answerId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
         AnswerEntity requestAnswerEntity = new AnswerEntity();
@@ -76,7 +76,7 @@ public class AnswerController {
 
     // Method to delete an answer
     @RequestMapping(path = "/answer/delete/{answerId}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable String answerId, @RequestHeader("Authorization") final String authorizationToken)
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable String answerId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
         // Calling service method to delete the answer
@@ -92,7 +92,7 @@ public class AnswerController {
 
     // Method to get answers for given question
     @RequestMapping(path = "answer/all/{questionId}", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(@PathVariable String questionId, @RequestHeader("Authorization") final String authorizationToken)
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(@PathVariable String questionId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Initializing response collection
