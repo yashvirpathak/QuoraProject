@@ -34,4 +34,8 @@ public class CommonController {
         return new ResponseEntity<UserDetailsResponse>(userDetails, HttpStatus.OK);
     }
 
+    public static String getToken(final String token){
+        String[] userAuthorizationToken = token.split("Bearer ");
+        return userAuthorizationToken[1];
+    }
 }

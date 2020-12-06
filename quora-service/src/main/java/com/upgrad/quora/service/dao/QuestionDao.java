@@ -62,10 +62,8 @@ public class QuestionDao {
     // Method to delete question. QuestionEntity as input will be deleted from DB
     public boolean deleteQuestion(final QuestionEntity questionEntity) throws IllegalArgumentException {
         try {
-            // Initiating delete question transaction
-            entityManager.getTransaction().begin();
+            // Delete question
             entityManager.remove(questionEntity);
-            entityManager.getTransaction().commit();
         } catch (IllegalArgumentException iae) {
             return false;
         }
@@ -76,7 +74,7 @@ public class QuestionDao {
     public List<QuestionEntity> getAllQuestionsByUser(final String userId) {
         try {
             return entityManager.createNamedQuery("allQuestionsByUserId", QuestionEntity.class)
-                    .setParameter("uuid", userId)
+                    .setParameter("userId", userId)
                     .getResultList();
         } catch (NoResultException nre) {
             return null;
