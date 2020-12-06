@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Service
 public class UserBusinessService {
@@ -73,7 +72,7 @@ public class UserBusinessService {
             userAuthToken.setUser(userEntity);
             final ZonedDateTime now = ZonedDateTime.now();
             final ZonedDateTime expiresAt = now.plusHours(8);
-            userAuthToken.setUuid(UUID.randomUUID().toString());
+            userAuthToken.setUuid(userEntity.getUuid());
             userAuthToken.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), now, expiresAt));
             userAuthToken.setLoginAt(now);
             userAuthToken.setExpiresAt(expiresAt);
@@ -95,7 +94,7 @@ public class UserBusinessService {
         }
 
         userAuthToken.setLogoutAt(ZonedDateTime.now());
-
+        userDao.updateUserAuth(userAuthToken);
         UserEntity signedOutUser = userAuthToken.getUser();
         return signedOutUser;
 
