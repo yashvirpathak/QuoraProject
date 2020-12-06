@@ -30,7 +30,7 @@ public class QuestionController {
             throws AuthorizationFailedException {
 
         // Initializing Question Entity
-        // abc
+        // abc - 2
         final QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setUuid(UUID.randomUUID().toString());
         questionEntity.setContent(request.getContent());

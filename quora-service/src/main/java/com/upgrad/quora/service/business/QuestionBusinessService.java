@@ -18,6 +18,7 @@ public class QuestionBusinessService {
     private QuestionDao questionDao;
 
     // Method to create new question. Persisting Question Entity in DB
+    // Comment 2
     public QuestionEntity createQuestion(final QuestionEntity questionEntity, final String authorization) throws AuthorizationFailedException {
 
         // Authorizing user
