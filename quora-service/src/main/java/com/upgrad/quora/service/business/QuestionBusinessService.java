@@ -25,10 +25,10 @@ public class QuestionBusinessService {
 
     // Method to create new question. Persisting Question Entity in DB
     @Transactional(propagation = Propagation.REQUIRED)
-    public QuestionEntity createQuestion(final QuestionEntity questionEntity, final String authorization) throws AuthorizationFailedException {
+    public QuestionEntity createQuestion(final QuestionEntity questionEntity, final String token) throws AuthorizationFailedException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -43,10 +43,10 @@ public class QuestionBusinessService {
     }
 
     // Method to get all questions posted by any user
-    public List<QuestionEntity> getAllQuestions(final String authorization) throws AuthorizationFailedException {
+    public List<QuestionEntity> getAllQuestions(final String token) throws AuthorizationFailedException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -60,11 +60,12 @@ public class QuestionBusinessService {
     }
 
     // Method to edit content for given question
-    public QuestionEntity editQuestionContent(final QuestionEntity editRequest, final String authorization)
+    @Transactional(propagation = Propagation.REQUIRED)
+    public QuestionEntity editQuestionContent(final QuestionEntity editRequest, final String token)
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -74,9 +75,9 @@ public class QuestionBusinessService {
         }
 
         // Checking if question exists in DB
-        QuestionEntity questionEntity = questionDao.getQuestionByUuid(editRequest.getUuid());
+        //QuestionEntity questionEntity = questionDao.getQuestionByUuid(editRequest.getUuid());
 
-        if (questionEntity == null || questionEntity.getUuid().isEmpty()) {
+        if (editRequest == null || editRequest.getUuid().isEmpty()) {
             throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
         }
 
@@ -90,11 +91,12 @@ public class QuestionBusinessService {
 
     // Method to delete question. QuestionEntity as input will be deleted from DB
     // Only Question owner can delete the question
-    public boolean deleteQuestion(final String questionId, final String authorization)
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean deleteQuestion(final String questionId, final String token)
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -119,11 +121,11 @@ public class QuestionBusinessService {
     }
 
     // Method to get all questions owner by the user
-    public List<QuestionEntity> getAllQuestionsByUser(final String userId, final String authorization)
+    public List<QuestionEntity> getAllQuestionsByUser(final String userId, final String token)
             throws AuthorizationFailedException, UserNotFoundException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(authorization);
+        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
