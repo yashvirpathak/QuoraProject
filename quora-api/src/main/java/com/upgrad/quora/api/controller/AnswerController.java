@@ -59,9 +59,10 @@ public class AnswerController {
     public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest editRequest, @PathVariable String answerId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
-        AnswerEntity requestAnswerEntity = new AnswerEntity();
         // Add logic to map edit request to Question entity
-
+        AnswerEntity requestAnswerEntity = new AnswerEntity();
+        requestAnswerEntity.setUuid(answerId);
+        requestAnswerEntity.setAnswer(editRequest.getContent());
 
         // Calling service method to edit answer content
         String token = CommonController.getToken(authorizationToken);

@@ -46,7 +46,7 @@ public class AnswerBusinessService {
 
     // Method to edit Answer content
     @Transactional(propagation = Propagation.REQUIRED)
-    public AnswerEntity editAnswerContent(final AnswerEntity editRequest, final String authorization)
+    public AnswerEntity editAnswerContent(final AnswerEntity editAnswerEntity, final String authorization)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
         // Authorizing user
@@ -60,18 +60,23 @@ public class AnswerBusinessService {
         }
 
         // Check if Answer is valid or not
-        AnswerEntity answerEntity = answerDao.getAnswerByUuid(editRequest.getUuid());
+        AnswerEntity answerEntity = answerDao.getAnswerByUuid(editAnswerEntity.getUuid());
         if (answerEntity == null || answerEntity.getUuid().isEmpty()) {
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
 
         // Checking if user is owner of the answer
-        if (!(userAuthTokenEntity.getUser().equals(editRequest.getUser()))) {
+        if (!(userAuthTokenEntity.getUser().equals(answerEntity.getUser()))) {
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
         }
 
         // Update/edit the answer
-        return answerDao.editAnswerContent(editRequest);
+        editAnswerEntity.setUuid(answerEntity.getUuid());
+        editAnswerEntity.setUser(answerEntity.getUser());
+        editAnswerEntity.setId(answerEntity.getId());
+        editAnswerEntity.setCreateDate(answerEntity.getCreateDate());
+        editAnswerEntity.setQuestion(answerEntity.getQuestion());
+        return answerDao.editAnswerContent(editAnswerEntity);
     }
 
     // Method to delete an answer
