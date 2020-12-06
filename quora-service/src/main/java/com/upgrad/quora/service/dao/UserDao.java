@@ -69,10 +69,14 @@ public class UserDao {
         }
     }
 
-
     //Method to create user authentication token
     public UserAuthTokenEntity createAuthToken(final UserAuthTokenEntity userAuthToken) {
         entityManager.persist(userAuthToken);
         return userAuthToken;
+    }
+
+    //Method to delete user authentication token
+    public void deleteAuthToken(final UserAuthTokenEntity userAuthToken) {
+        entityManager.remove(userAuthToken);
     }
 }
