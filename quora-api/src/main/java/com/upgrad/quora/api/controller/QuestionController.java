@@ -26,11 +26,10 @@ public class QuestionController {
 
     // Method to create question
     @RequestMapping(path = "/question/create", method = RequestMethod.POST)
-    public ResponseEntity<QuestionResponse> createQuestion(final QuestionRequest request, final String authorizationToken)
+    public ResponseEntity<QuestionResponse> createQuestion(final QuestionRequest request, @RequestHeader("Authorization") final String authorizationToken)
             throws AuthorizationFailedException {
 
         // Initializing Question Entity
-        // abc - 2
         final QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setUuid(UUID.randomUUID().toString());
         questionEntity.setContent(request.getContent());
@@ -103,7 +102,7 @@ public class QuestionController {
         questionBusinessService.deleteQuestion(questionId, token);
 
         // Preparing and returning response
-        QuestionDeleteResponse questionDeleteResponse=new QuestionDeleteResponse();
+        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse();
         questionDeleteResponse.setStatus("QUESTION DELETED");
         questionDeleteResponse.setId(questionId);
         return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
