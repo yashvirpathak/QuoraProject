@@ -7,6 +7,8 @@ import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 
@@ -17,16 +19,17 @@ public class AdminBusinessService {
 
     // Method to delete user. UserEntity as input will be deleted from DB
     // Only Admin can delete the user
-    public boolean userDelete(final String userId, final String authorizationToken)
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean userDelete(final String userId, final String token)
             throws AuthorizationFailedException, UserNotFoundException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authorizationToken);
+        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
         }
 
