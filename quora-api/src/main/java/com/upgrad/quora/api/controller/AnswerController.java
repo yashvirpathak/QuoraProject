@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -33,8 +30,10 @@ public class AnswerController {
 
     // Method to create an Answer
     @RequestMapping(path = "/question/{questionId}/answer/create", method = RequestMethod.POST)
-    public ResponseEntity<AnswerResponse> createAnswer(final AnswerRequest request, final @PathVariable String questionId, final String authorizationToken)
+    public ResponseEntity<AnswerResponse> createAnswer(final AnswerRequest request, final @PathVariable String questionId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, InvalidQuestionException {
+
+        // Checking if question exists in DB
         final QuestionEntity questionEntity = questionBusinessService.getQuestionByUuid(questionId);
 
         // Preparing Answer entity
@@ -45,24 +44,29 @@ public class AnswerController {
         answerEntity.setUuid(UUID.randomUUID().toString());
 
         // Creating the answer
-        final AnswerEntity createdAnswerEntity = answerBusinessService.createAnswer(answerEntity, authorizationToken);
+        String token = CommonController.getToken(authorizationToken);
+        final AnswerEntity createdAnswerEntity = answerBusinessService.createAnswer(answerEntity, token);
 
         // Preparing and the response
-        AnswerResponse answerResponse = new AnswerResponse().id(createdAnswerEntity.getUuid()).status("ANSWER CREATED");
+        AnswerResponse answerResponse = new AnswerResponse();
+        answerResponse.setId(createdAnswerEntity.getUuid());
+        answerResponse.status("ANSWER CREATED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.CREATED);
     }
 
     // Method to edit answer content
     @RequestMapping(path = "/answer/edit/{answerId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest editRequest, @PathVariable String answerId, final String authorizationToken)
+    public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest editRequest, @PathVariable String answerId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
-        AnswerEntity requestAnswerEntity = new AnswerEntity();
         // Add logic to map edit request to Question entity
-
+        AnswerEntity requestAnswerEntity = new AnswerEntity();
+        requestAnswerEntity.setUuid(answerId);
+        requestAnswerEntity.setAnswer(editRequest.getContent());
 
         // Calling service method to edit answer content
-        AnswerEntity responseAnswerEntity = answerBusinessService.editAnswerContent(requestAnswerEntity, authorizationToken);
+        String token = CommonController.getToken(authorizationToken);
+        AnswerEntity responseAnswerEntity = answerBusinessService.editAnswerContent(requestAnswerEntity, token);
 
         // Preparing and returning response
         AnswerEditResponse response = new AnswerEditResponse();
@@ -72,12 +76,13 @@ public class AnswerController {
     }
 
     // Method to delete an answer
-    @RequestMapping(path = "/answer/delete/{answerId}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable String answerId, final String authorizationToken)
+    @RequestMapping(path = "/answer/delete/{answerId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable String answerId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
         // Calling service method to delete the answer
-        boolean status = answerBusinessService.deleteAnswer(answerId, authorizationToken);
+        String token = CommonController.getToken(authorizationToken);
+        boolean status = answerBusinessService.deleteAnswer(answerId, token);
 
         // Preparing and returning response
         AnswerDeleteResponse response = new AnswerDeleteResponse();
@@ -87,8 +92,8 @@ public class AnswerController {
     }
 
     // Method to get answers for given question
-    @RequestMapping(path = "answer/all/{questionId}", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(@PathVariable String questionId, final String authorizationToken)
+    @RequestMapping(path = "answer/all/{questionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(@PathVariable String questionId, @RequestHeader("authorization") final String authorizationToken)
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Initializing response collection
@@ -98,7 +103,8 @@ public class AnswerController {
         final QuestionEntity questionEntity = questionBusinessService.getQuestionByUuid(questionId);
 
         // Calling service layer to fetch all answers for the question
-        final List<AnswerEntity> answerEntities = answerBusinessService.getAllAnswersToQuestion(questionId, authorizationToken);
+        String token = CommonController.getToken(authorizationToken);
+        final List<AnswerEntity> answerEntities = answerBusinessService.getAllAnswersToQuestion(questionId, token);
 
         // Preparing response collection
         for (AnswerEntity answerEntity : answerEntities) {

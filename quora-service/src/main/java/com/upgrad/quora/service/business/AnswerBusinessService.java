@@ -10,6 +10,8 @@ import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -23,6 +25,7 @@ public class AnswerBusinessService {
     private QuestionDao questionDao;
 
     // Method to create an Answer
+    @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity createAnswer(final AnswerEntity answerEntity, final String authorization)
             throws AuthorizationFailedException {
 
@@ -32,16 +35,18 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post an answer");
         }
 
         // Create answer
+        answerEntity.setUser(userAuthTokenEntity.getUser());
         return answerDao.createAnswer(answerEntity);
     }
 
     // Method to edit Answer content
-    public AnswerEntity editAnswerContent(final AnswerEntity editRequest, final String authorization)
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AnswerEntity editAnswerContent(final AnswerEntity editAnswerEntity, final String authorization)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
         // Authorizing user
@@ -50,26 +55,32 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to edit an answer");
         }
 
         // Check if Answer is valid or not
-        AnswerEntity answerEntity = answerDao.getAnswerByUuid(editRequest.getUuid());
+        AnswerEntity answerEntity = answerDao.getAnswerByUuid(editAnswerEntity.getUuid());
         if (answerEntity == null || answerEntity.getUuid().isEmpty()) {
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
 
         // Checking if user is owner of the answer
-        if (!(userAuthTokenEntity.getUser().equals(editRequest.getUser()))) {
+        if (!(userAuthTokenEntity.getUser().equals(answerEntity.getUser()))) {
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
         }
 
         // Update/edit the answer
-        return answerDao.editAnswerContent(editRequest);
+        editAnswerEntity.setUuid(answerEntity.getUuid());
+        editAnswerEntity.setUser(answerEntity.getUser());
+        editAnswerEntity.setId(answerEntity.getId());
+        editAnswerEntity.setCreateDate(answerEntity.getCreateDate());
+        editAnswerEntity.setQuestion(answerEntity.getQuestion());
+        return answerDao.editAnswerContent(editAnswerEntity);
     }
 
     // Method to delete an answer
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteAnswer(final String answerId, final String authorization)
             throws AuthorizationFailedException, AnswerNotFoundException {
 
@@ -79,7 +90,7 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
         }
 
@@ -90,7 +101,7 @@ public class AnswerBusinessService {
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
 
-        // Throw exception if user is not owner of answer or not an admin
+        // Throw exception if user is not owner of answer or not an admin user
         if (!(userAuthTokenEntity.getUser().equals(deleteRequest.getUser()) || deleteRequest.getUser().getRole().toLowerCase().equals("admin"))) {
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
         }
@@ -109,7 +120,7 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
         }
 

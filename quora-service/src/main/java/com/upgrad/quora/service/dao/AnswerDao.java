@@ -27,10 +27,8 @@ public class AnswerDao {
     // Method to delete an answer
     public boolean deleteAnswer(final AnswerEntity answerEntity) throws IllegalArgumentException {
         try {
-            // Initiating transaction to remove answer
-            entityManager.getTransaction().begin();
+            // Deleting the answer
             entityManager.remove(answerEntity);
-            entityManager.getTransaction().commit();
         } catch (IllegalArgumentException iae) {
             return false;
         }
