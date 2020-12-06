@@ -94,7 +94,7 @@ public class QuestionController {
     }
 
     // Method to delete the question
-    @RequestMapping(path = "/question/delete/{questionId}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/question/delete/{questionId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable String questionId, @RequestHeader("Authorization") final String authorizationToken)
             throws AuthorizationFailedException, InvalidQuestionException {
 
@@ -102,8 +102,11 @@ public class QuestionController {
         String token = CommonController.getToken(authorizationToken);
         questionBusinessService.deleteQuestion(questionId, token);
 
-        // returning response
-        return new ResponseEntity<QuestionDeleteResponse>(HttpStatus.OK);
+        // Preparing and returning response
+        QuestionDeleteResponse questionDeleteResponse=new QuestionDeleteResponse();
+        questionDeleteResponse.setStatus("QUESTION DELETED");
+        questionDeleteResponse.setId(questionId);
+        return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
     }
 
     // Method to get all Questions owned by user

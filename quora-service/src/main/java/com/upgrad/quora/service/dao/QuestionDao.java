@@ -62,10 +62,8 @@ public class QuestionDao {
     // Method to delete question. QuestionEntity as input will be deleted from DB
     public boolean deleteQuestion(final QuestionEntity questionEntity) throws IllegalArgumentException {
         try {
-            // Initiating delete question transaction
-            entityManager.getTransaction().begin();
+            // Delete question
             entityManager.remove(questionEntity);
-            entityManager.getTransaction().commit();
         } catch (IllegalArgumentException iae) {
             return false;
         }
