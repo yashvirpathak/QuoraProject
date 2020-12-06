@@ -17,16 +17,16 @@ public class AdminBusinessService {
 
     // Method to delete user. UserEntity as input will be deleted from DB
     // Only Admin can delete the user
-    public boolean userDelete(final String userId, final String authorizationToken)
+    public boolean userDelete(final String userId, final String token)
             throws AuthorizationFailedException, UserNotFoundException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authorizationToken);
+        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(token);
         if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
 
-        if (userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
+        if (userAuthTokenEntity.getLogoutAt() != null && userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
         }
 

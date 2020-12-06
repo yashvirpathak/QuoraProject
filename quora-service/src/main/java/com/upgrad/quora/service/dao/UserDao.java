@@ -47,10 +47,8 @@ public class UserDao {
     // Method to delete user
     public boolean deleteUser(final UserEntity userEntity){
         try {
-            // Initiating delete question transaction
-            entityManager.getTransaction().begin();
+            // Delete user
             entityManager.remove(userEntity);
-            entityManager.getTransaction().commit();
         } catch (IllegalArgumentException iae) {
             return false;
         }
