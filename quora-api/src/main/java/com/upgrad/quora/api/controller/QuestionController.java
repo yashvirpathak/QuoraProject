@@ -47,7 +47,7 @@ public class QuestionController {
 
     // Method to get all questions
     @RequestMapping(path = "/question/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(final String authorizationToken)
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(@RequestHeader("Authorization") final String authorizationToken)
             throws AuthorizationFailedException {
 
         // Initiating the collection
