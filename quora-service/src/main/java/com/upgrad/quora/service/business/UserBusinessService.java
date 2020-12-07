@@ -1,5 +1,6 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.common.Common;
 import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
@@ -25,6 +26,9 @@ public class UserBusinessService {
     @Autowired
     private PasswordCryptographyProvider cryptographyProvider;
 
+    @Autowired
+    private Common common;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity signup(UserEntity userEntity) throws SignUpRestrictedException {
 
@@ -45,14 +49,12 @@ public class UserBusinessService {
 
     }
 
+    // Method to get user details
     public UserEntity getUser(String userId, String userAuthorizationToken)
             throws UserNotFoundException, AuthorizationFailedException {
 
-        UserAuthTokenEntity userAuthToken = questionDao.getUserAuthToken(userAuthorizationToken);
-
-        if (userAuthToken == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        // Validating user token
+        UserAuthTokenEntity userAuthToken = common.validateUserToken(userAuthorizationToken);
         if ((userAuthToken.getLogoutAt() != null) &&
                 (userAuthToken.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) &&
                 (userAuthToken.getLogoutAt().compareTo(ZonedDateTime.now()) < 0)) {

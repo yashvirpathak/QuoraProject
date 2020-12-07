@@ -1,5 +1,6 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.common.Common;
 import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.QuestionEntity;
@@ -24,15 +25,15 @@ public class QuestionBusinessService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private Common common;
+
     // Method to create new question. Persisting Question Entity in DB
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity createQuestion(final QuestionEntity questionEntity, final String token) throws AuthorizationFailedException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
-        if (userAuthTokenEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        UserAuthTokenEntity userAuthTokenEntity = common.validateUserToken(token);
 
         if (userAuthTokenEntity.getLogoutAt() != null &&
                 userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
@@ -49,10 +50,7 @@ public class QuestionBusinessService {
     public List<QuestionEntity> getAllQuestions(final String token) throws AuthorizationFailedException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
-        if (userAuthTokenEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        UserAuthTokenEntity userAuthTokenEntity = common.validateUserToken(token);
 
         if (userAuthTokenEntity.getLogoutAt() != null &&
                 userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
@@ -70,10 +68,7 @@ public class QuestionBusinessService {
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
-        if (userAuthTokenEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        UserAuthTokenEntity userAuthTokenEntity = common.validateUserToken(token);
 
         if (userAuthTokenEntity.getLogoutAt() != null &&
                 userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
@@ -101,10 +96,7 @@ public class QuestionBusinessService {
             throws AuthorizationFailedException, InvalidQuestionException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
-        if (userAuthTokenEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        UserAuthTokenEntity userAuthTokenEntity = common.validateUserToken(token);
 
         if (userAuthTokenEntity.getLogoutAt() != null &&
                 userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
@@ -132,10 +124,7 @@ public class QuestionBusinessService {
             throws AuthorizationFailedException, UserNotFoundException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = questionDao.getUserAuthToken(token);
-        if (userAuthTokenEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        UserAuthTokenEntity userAuthTokenEntity = common.validateUserToken(token);
 
         if (userAuthTokenEntity.getLogoutAt() != null &&
                 userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
