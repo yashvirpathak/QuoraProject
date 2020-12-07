@@ -1,5 +1,6 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.common.Common;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
@@ -17,6 +18,9 @@ public class AdminBusinessService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private Common common;
+
     // Method to delete user. UserEntity as input will be deleted from DB
     // Only Admin can delete the user
     @Transactional(propagation = Propagation.REQUIRED)
@@ -24,10 +28,7 @@ public class AdminBusinessService {
             throws AuthorizationFailedException, UserNotFoundException {
 
         // Authorizing user
-        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(token);
-        if (userAuthTokenEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-        }
+        UserAuthTokenEntity userAuthTokenEntity = common.validateUserToken(token);
 
         if (userAuthTokenEntity.getLogoutAt() != null &&
                 userAuthTokenEntity.getLogoutAt().compareTo(ZonedDateTime.now()) < 0 &&
